@@ -1,5 +1,5 @@
 doctype 5
-html
+html(ng-app='system2')
   head
     - if (typeof(title) == 'undefined')
         title Express Starter Template
@@ -10,9 +10,8 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     
     // include default scripts and any view scripts
-    script(src='/javascripts/jquery-1.8.3.min.js')
-    script(src='/javascripts/modernizr.js')
-    
+    //script(src='/javascripts/jquery-1.8.3.min.js')
+    //script(src='/javascripts/modernizr.js')
     block head
     
   body   
