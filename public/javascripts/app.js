@@ -40,6 +40,7 @@
                 //chart.dataProvider = chartData;
                 chart.startDuration = 0;
                 scope.chart = chart;
+                var chartGrade = attrs['grade'];
 
                 scope.$watch('chartStyle', function(val){
                     if(scope.chartData == undefined || scope.chartData == null) return;
@@ -50,7 +51,7 @@
                 scope.$watch('chartData', function(val){
                     if(val== undefined || val == null) return;
                     console.log('updating Chart data');
-                    chart.dataProvider = val;
+                    chart.dataProvider = val[chartGrade];
                     // AXES
                     // X
                     var xAxis = new AmCharts.ValueAxis();
@@ -114,27 +115,6 @@
         };
     });
 
-    system2.directive('amGraph', function(){
-        return {
-            restrict: "E",
-            require: "^amChart",
-            replace: true,
-            link: function(scope, element, attrs, amChartController){
-                console.log('link');
-                // GRAPH
-                var graph = new AmCharts.AmGraph();
-                graph.valueField = "value"; // valueField responsible for the size of a bullet
-                graph.xField = "x";
-                graph.yField = "y";
-                graph.lineAlpha = 0;
-                graph.bullet = "bubble";
-                graph.balloonText = "x:<b>[[x]]</b> y:<b>[[y]]</b><br>value:<b>[[value]]</b>"
-
-                amChartController.addGraph(graph);
-            }
-        };
-    });
-
     system2.factory('Student', function(){
         function Student(name, grade, score1, score2){
             this.name =name;
@@ -176,15 +156,30 @@
             return r;
         }
 
+        studentData.DataByGrade = function(grade){
+            console.log(grade);
+            if(typeof grade === 'undefined' || grade === null){
+                console.log('returning full dataset.');
+                return studentData.Data;
+            }
+            console.log('returning filtered dataset for grade ' + grade + '.');
+            return studentData.Data.filter(function(student){
+                if(student.grade === grade){
+                    return true;
+                }
+            });
+        }
+
         studentData.Growths = function(grade){
-            
-            return studentData.Data.map(function (student) {
+            var data = studentData.DataByGrade(grade);
+            return data.map(function (student) {
                 return student.growth();
             });
         }
 
-        studentData.Scores = function () {
-            return studentData.Data.map(function (student) {
+        studentData.Scores = function (grade) {
+            var data = studentData.DataByGrade(grade);
+            return data.map(function (student) {
                 return student.score2;
             });
         }
@@ -199,40 +194,40 @@
             $rootScope.$broadcast('studentDataUpdated');
         }
 
-        studentData.AverageGrowth = function(){
-            return ArrayMath.Average(this.Growths());
+        studentData.AverageGrowth = function(grade){
+            return ArrayMath.Average(this.Growths(grade));
         }
 
-        studentData.AverageScore = function(){
-            return ArrayMath.Average(this.Scores());
+        studentData.AverageScore = function(grade){
+            return ArrayMath.Average(this.Scores(grade));
         }
 
-        studentData.MinMaxGrowth = function(){
-            var min = ArrayMath.Min(this.Growths());
-            var max = ArrayMath.Max(this.Growths());
+        studentData.MinMaxGrowth = function(grade){
+            var min = ArrayMath.Min(this.Growths(grade));
+            var max = ArrayMath.Max(this.Growths(grade));
             return [min,max];
         }
 
-        studentData.MinMaxScore = function(){
-            var min = ArrayMath.Min(this.Scores());
-            var max = ArrayMath.Max(this.Scores());
+        studentData.MinMaxScore = function(grade){
+            var min = ArrayMath.Min(this.Scores(grade));
+            var max = ArrayMath.Max(this.Scores(grade));
             return [min,max];
         }
 
-        studentData.GrowthStandardDev = function(){
-            return ArrayMath.StandardDeviation(this.Growths());
+        studentData.GrowthStandardDev = function(grade){
+            return ArrayMath.StandardDeviation(this.Growths(grade));
         }
 
-        studentData.ScoresStandardDev = function(){
-            return ArrayMath.StandardDeviation(this.Scores());
+        studentData.ScoresStandardDev = function(grade){
+            return ArrayMath.StandardDeviation(this.Scores(grade));
         }
 
-        studentData.WithinStandardDevPlotpoints = function () {
-            var topScore = this.AverageScore() + this.ScoresStandardDev();
-            var bottomScore = this.AverageScore() - this.ScoresStandardDev();
-            var topGrowth = this.AverageGrowth() + this.GrowthStandardDev();
-            var bottomGrowth = this.AverageGrowth() - this.GrowthStandardDev();
-            var filteredList = this.Data.filter(function(student){
+        studentData.WithinStandardDevPlotpoints = function (grade) {
+            var topScore = this.AverageScore(grade) + this.ScoresStandardDev(grade);
+            var bottomScore = this.AverageScore(grade) - this.ScoresStandardDev(grade);
+            var topGrowth = this.AverageGrowth(grade) + this.GrowthStandardDev(grade);
+            var bottomGrowth = this.AverageGrowth(grade) - this.GrowthStandardDev(grade);
+            var filteredList = studentData.DataByGrade(grade).filter(function(student){
                 if((bottomScore <= student.score2 && student.score2 <= topScore) &&
                     (bottomGrowth <= student.growth() && student.growth() <= topGrowth)){
                     return true;
@@ -243,13 +238,13 @@
             });
         }
 
-        studentData.WithoutStandardDevPlotpoints = function () {
-            var topScore = this.AverageScore() + this.ScoresStandardDev();
-            var bottomScore = this.AverageScore() - this.ScoresStandardDev();
-            var topGrowth = this.AverageGrowth() + this.GrowthStandardDev();
-            var bottomGrowth = this.AverageGrowth() - this.GrowthStandardDev();
+        studentData.WithoutStandardDevPlotpoints = function (grade) {
+            var topScore = this.AverageScore(grade) + this.ScoresStandardDev(grade);
+            var bottomScore = this.AverageScore(grade) - this.ScoresStandardDev(grade);
+            var topGrowth = this.AverageGrowth(grade) + this.GrowthStandardDev(grade);
+            var bottomGrowth = this.AverageGrowth(grade) - this.GrowthStandardDev(grade);
 
-            var filteredList = this.Data.filter(function(student){
+            var filteredList = studentData.DataByGrade(grade).filter(function(student){
                 if((student.score2 < bottomScore || student.score2 > topScore) ||
                     (student.growth() < bottomGrowth || student.growth() > topGrowth)){
                     return true;
@@ -261,14 +256,14 @@
             });
         }
 
-        studentData.Plotpoints = function(){
-            return this.Data.map(function(student){
+        studentData.Plotpoints = function(grade){
+            return studentData.DataByGrade(grade).map(function(student){
                 return [student.score2, student.growth(), student.name];
             });
         }
 
-        studentData.TrendLinePoints = function(){
-            var reg = regression('polynomial', this.Plotpoints(), 3);
+        studentData.TrendLinePoints = function(grade){
+            var reg = regression('polynomial', this.Plotpoints(grade), 3);
             return reg.points;
         }
 
@@ -317,6 +312,7 @@
         var app = this;
         console.log('init controller...');
         $scope.students = [];
+        $scope.grades = [];
         $scope.bulletSize = 10;
         $scope.chartStyle = "width: 800px; height: 600px;";
         $scope.showForm = false;
@@ -325,6 +321,7 @@
 
         $scope.$on('studentDataUpdated', function(){
             $scope.students = StudentData.Data;
+            $scope.grades = StudentData.Grades();
         });
 
         // start by loading up some empty students
@@ -350,16 +347,20 @@
                     }
                 }
 
-                var topScore = StudentData.AverageScore() + StudentData.ScoresStandardDev();
-                var bottomScore = StudentData.AverageScore() - StudentData.ScoresStandardDev();
-                var topGrowth = StudentData.AverageGrowth() + StudentData.GrowthStandardDev();
-                var bottomGrowth = StudentData.AverageGrowth() - StudentData.GrowthStandardDev();
-                console.log('Score range: ' + bottomScore + ' to ' + topScore);
-                console.log('Growth range: ' + bottomGrowth + ' to ' + topGrowth);
-                console.log(StudentData.Plotpoints());
-                console.log(StudentData.WithinStandardDevPlotpoints());
-                console.log(StudentData.WithoutStandardDevPlotpoints());
-                console.log(StudentData.Grades());
+                for(var x = 0;x<StudentData.Grades().length;x++){
+                    var targetGrade = StudentData.Grades()[x];
+                    var topScore = StudentData.AverageScore(targetGrade) + StudentData.ScoresStandardDev(targetGrade);
+                    var bottomScore = StudentData.AverageScore(targetGrade) - StudentData.ScoresStandardDev(targetGrade);
+                    var topGrowth = StudentData.AverageGrowth(targetGrade) + StudentData.GrowthStandardDev(targetGrade);
+                    var bottomGrowth = StudentData.AverageGrowth(targetGrade) - StudentData.GrowthStandardDev(targetGrade);
+                    console.log('Score range: ' + bottomScore + ' to ' + topScore);
+                    console.log('Growth range: ' + bottomGrowth + ' to ' + topGrowth);
+                    console.log(StudentData.Plotpoints(targetGrade));
+                    console.log(StudentData.WithinStandardDevPlotpoints(targetGrade));
+                    console.log(StudentData.WithoutStandardDevPlotpoints(targetGrade));
+                    console.log(StudentData.Grades(targetGrade));
+                }
+
                 $scope.showForm=true;
                 $scope.showFile = false;
                 $scope.$apply();
@@ -369,61 +370,66 @@
 
         $scope.addStudent = function(){
             StudentData.AddStudent(new Student());
-            console.log($scope.students);
         };
 
         $scope.processStudents = function() {
-            var greenPoints = StudentData.WithinStandardDevPlotpoints();
-            var redPoints = StudentData.WithoutStandardDevPlotpoints();
-            var bluePoints = StudentData.TrendLinePoints().sort(function(a, b){ return a[0]-b[0]});
-            var newChartData = [];
-            var defaultx = StudentData.AverageScore();
-            var defaulty = StudentData.AverageGrowth();
+            $scope.chartData = [];
+            for(var x=0;x<StudentData.Grades().length;x++) {
+                var targetGrade = StudentData.Grades()[x];
+                var greenPoints = StudentData.WithinStandardDevPlotpoints(targetGrade);
+                var redPoints = StudentData.WithoutStandardDevPlotpoints(targetGrade);
+                var bluePoints = StudentData.TrendLinePoints(targetGrade).sort(function (a, b) {
+                    return a[0] - b[0]
+                });
+                var newChartData = [];
+                var defaultx = StudentData.AverageScore(targetGrade);
+                var defaulty = StudentData.AverageGrowth(targetGrade);
 
-            var x = greenPoints.length;
-            if(redPoints.length > x){
-                x = redPoints.length;
-            }
-
-            if(bluePoints.length > x){
-                x = bluePoints.length;
-            }
-
-            for(var i = 0; i < x; i++){
-                var dataObj = {};
-                if(i < greenPoints.length){
-                    dataObj.x = greenPoints[i][0];
-                    dataObj.y = greenPoints[i][1];
-                    dataObj.value = greenPoints[i][2];
-                    dataObj.bullet = "round";
-                } else {
-                    dataObj.x = defaultx;
-                    dataObj.y = defaulty;
-                    dataObj.value = 'Average';
-                    dataObj.bullet = null;
+                var x = greenPoints.length;
+                if (redPoints.length > x) {
+                    x = redPoints.length;
                 }
 
-                if(i<redPoints.length){
-                    dataObj.x2 = redPoints[i][0];
-                    dataObj.y2 = redPoints[i][1];
-                    dataObj.value2 = redPoints[i][2];
-                    dataObj.bullet2 = "round";
-                } else{
-                    dataObj.x2 = defaultx;
-                    dataObj.y2 = defaulty;
-                    dataObj.value = 'Average';
+                if (bluePoints.length > x) {
+                    x = bluePoints.length;
                 }
 
-                if(i<bluePoints.length){
-                    dataObj.x3 = bluePoints[i][0];
-                    dataObj.y3 = bluePoints[i][1];
-                    dataObj.bullet3 = "round";
+                for (var i = 0; i < x; i++) {
+                    var dataObj = {};
+                    if (i < greenPoints.length) {
+                        dataObj.x = greenPoints[i][0];
+                        dataObj.y = greenPoints[i][1];
+                        dataObj.value = greenPoints[i][2];
+                        dataObj.bullet = "round";
+                    } else {
+                        dataObj.x = defaultx;
+                        dataObj.y = defaulty;
+                        dataObj.value = 'Average';
+                        dataObj.bullet = null;
+                    }
+
+                    if (i < redPoints.length) {
+                        dataObj.x2 = redPoints[i][0];
+                        dataObj.y2 = redPoints[i][1];
+                        dataObj.value2 = redPoints[i][2];
+                        dataObj.bullet2 = "round";
+                    } else {
+                        dataObj.x2 = defaultx;
+                        dataObj.y2 = defaulty;
+                        dataObj.value = 'Average';
+                    }
+
+                    if (i < bluePoints.length) {
+                        dataObj.x3 = bluePoints[i][0];
+                        dataObj.y3 = bluePoints[i][1];
+                        dataObj.bullet3 = "round";
+                    }
+
+                    newChartData.push(dataObj);
                 }
 
-                newChartData.push(dataObj);
+                $scope.chartData[targetGrade] = newChartData;
             }
-
-            $scope.chartData = newChartData;
         }
 
         $scope.showLargeChart = function(){
