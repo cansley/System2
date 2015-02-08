@@ -5,48 +5,64 @@ block head
     script(src='amcharts/xy.js')
     script(src='javascripts/regression.js')
     script(src='javascripts/app.js')
+    script(src='javascripts/jquery-1.11.1.min.js')
+    script(src='javascripts/jquery-migrate-1.2.1.min.js')
+    script(src='javascripts/bootstrap.min.js')
+    script(src='javascripts/modernizr.js')
+    script(src='javascripts/jquery.sparkline.min.js')
+    script(src='javascripts/toggles.min.js')
+    script(src='javascripts/retina.min.js')
+    script(src='javascripts/jquery.cookies.js')
+    script(src='javascripts/custom.js')
 block content
-    section(class="featured")
-      div(class="content-wrapper")
-          hgroup(class="title")
-              h1=title 
-              h2 Welcome to System2
-          p
-            |Providing you a better way to analyse student performance.
+    section()
+        div(class='mainpanel')
+            div(class='headerbar')
+                a(class="menutoggle")
+                    i(class="fa fa-bars")
+                div(class="header-right")
+                    div#appbuttons
+                        form(method='post', action='reports.html')
+                            button.btn.btn-success.btn-primary(ng-click='processStudents()') Generate Report
+                            button.btn Cancel
+            div(class="pageheader")
+                h2 System 2
+            div(class="contentpanel")
+                    h2 2 Ways To Create Reports
+                    div(ng-controller='sys2Ctrl')
+                        div(class="row")
+                            div#choiceOne
+                                div(ng-show='showFile')
+                                p
+                                    h4 Fill out web form
+                                    button.btn.btn-primary.btn-lg Start
+                            div#choiceTwo
+                                p
+                                    h4 Find a CSV file on your computer.
+                                span.btn.btn-default.btn-file
+                                    | Find File
+                                    input(type='file', value='Load Data From File', onchange='angular.element(this).scope().loadStudents(this)') Choose File
+                        div(class='row')
+                            div(class="col-sm-12")
+                                div#tableLike(ng-show='showForm')
+                                        p
+                                            h4 Below is the data from the file, please review and make changes if you wish, then click "Generate Report" when ready.
+                                        div(style='margin-bottom:10px')
+                                            button.btn.btn-success.btn-primary(ng-click='processStudents()') Generate Report
 
-    section(class="main-content")
-        div(ng-controller='sys2Ctrl')
-            .overflowable
-                div(ng-show='showFile')
-                    ol(class="round")
-                        li(class="one")
-                            h5 To begin, please select a source file.
+                                        div(style="font-size:18px;width:100%")
+                                            div(ng-repeat='student in students')
+                                                input(ng-model='student.name')
+                                                input(ng-model='student.grade')
+                                                input(ng-model='student.score1')
+                                                input(ng-model='student.score2')
+                                                label {{student.growth()}}
+                                                label {{ student.percentGrowth() | percentage:2}}
+                                            button.btn.btn-primary.btn-sm(ng-click='addStudent()') Add Row
+                                            button.btn.btn-primary.btn-sm(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
+                         div(ng-show='showChart')
+                            button(ng-click='showLargeChart()') Large
+                            button(ng-click='showMedChart()') Medium
+                            button(ng-click='showSmallChart()') Small
                             br
-                    input(type='file', value='Load Data From File', onchange='angular.element(this).scope().loadStudents(this)')
-                div(ng-show='showForm')
-                    ol(class="round")
-                        li(class="two")
-                            h5 File successfully parsed.
-                            p
-                                |Below is the data from the file, please review and make changes if you wish, then click "Generate Report" when ready.
-                    button(ng-click='processStudents()') Generate Report
-                    br
-                    br
-                    div(style='overflow:auto; height: 300px;')
-                        div(ng-repeat='student in students')
-                            input(ng-model='student.name')
-                            input(ng-model='student.grade')
-                            input(ng-model='student.score1')
-                            input(ng-model='student.score2')
-                            label {{student.growth()}}
-                            label {{ student.percentGrowth() | percentage:2}}
-                    button(ng-click='addStudent()') Add Row
-                    br
-                    br
-                    button(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
-                 div(ng-show='showChart')
-                    button(ng-click='showLargeChart()') Large
-                    button(ng-click='showMedChart()') Medium
-                    button(ng-click='showSmallChart()') Small
-                    br
-                    am-chart(ng-repeat='grade in grades', grade='{{grade}}')
+                            am-chart(ng-repeat='grade in grades', grade='{{grade}}')
