@@ -504,7 +504,7 @@ strong {
     background: transparent url(../images/plus-white.png) no-repeat 92% center;
 }
 .nav-bracket > li.nav-parent > a:focus {
-    background-color: none;
+    background-color: transparent;
     color: #8F939E;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
@@ -689,7 +689,6 @@ strong {
 }
 .pageheader .fa-file-text {
     padding: 6px 10px;
-    `
 }
 .pageheader .fa-map-marker {
     padding: 6px 12px;
