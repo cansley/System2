@@ -60,9 +60,10 @@ block content
                                                 label {{ student.percentGrowth() | percentage:2}}
                                             button.btn.btn-primary.btn-sm(ng-click='addStudent()') Add Row
                                             button.btn.btn-primary.btn-sm(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
-                         div(ng-show='showChart')
-                            button(ng-click='showLargeChart()') Large
-                            button(ng-click='showMedChart()') Medium
-                            button(ng-click='showSmallChart()') Small
-                            br
-                            am-chart(ng-repeat='grade in grades', grade='{{grade}}')
+                         div(class='row')
+                            div(ng-show='showChart')
+                                button(ng-click='showLargeChart()') Large
+                                button(ng-click='showMedChart()') Medium
+                                button(ng-click='showSmallChart()') Small
+                                br
+                                am-chart(ng-repeat='grade in grades', grade='{{grade}}')
