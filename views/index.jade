@@ -20,46 +20,90 @@ block content
             div(class='headerbar')
                 a(class="menutoggle")
                     i(class="fa fa-bars")
+                div(class='header-left')
+                    h3(style='padding-left:10px;') System 2
                 div(class="header-right")
                     div#appbuttons
-                        form(method='post', action='reports.html')
-                            button.btn.btn-success.btn-primary(ng-click='processStudents()') Generate Report
-                            button.btn Cancel
+                        button.btn.btn-success.btn-primary(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
+                        button.btn Cancel
             div(class="pageheader")
-                h2 System 2
+                h2 3 Easy Steps
             div(class="contentpanel")
-                    h2 2 Ways To Create Reports
+                div()
+                    div(class='row')
+                        div(class='stepContainer')
+                            div(class='col-xs-3 col-sm-4 col-md-4')
+                                div(class='numberCircleContainer')
+                                    div(class='numberCircleSelected')#one 1
+                                    div(class='numberCircleContainerText') Add Data
+                            div(class='col-xs-3 col-sm-4 col-md-4')
+                                div(class='numberCircleContainer')
+                                    div(class='numberCircle')#two 2
+                                    div(class='numberCircleContainerText') Generate Report
+                            div(class='col-xs-3 col-sm-4 col-md-4')
+                                div(class='numberCircleContainer')
+                                    div(class='numberCircle')#three 3
+                                    div(class='numberCircleContainerText') View Report
+                    h4#directionText Choose how you will add test data.
                     div(ng-controller='sys2Ctrl')
                         div(class="row")
-                            div#choiceOne
-                                div(ng-show='showFile')
-                                p
-                                    h4 Fill out web form
-                                    button.btn.btn-primary.btn-lg Start
-                            div#choiceTwo
-                                p
-                                    h4 Find a CSV file on your computer.
-                                span.btn.btn-default.btn-file
-                                    | Find File
-                                    input(type='file', value='Load Data From File', onchange='angular.element(this).scope().loadStudents(this)') Choose File
+                            div(ng-show='showChoice')
+                                div#choiceOne
+                                    div(ng-show='showFile')
+                                    i(class="fa fa-pencil-square-o")#bg
+                                    p
+                                        h4 Fill out web form
+                                        button.btn.btn-primary.btn-lg(ng-click='showInputForm()') Start
+                                div#choiceTwo
+                                    i(class="fa fa-cloud-upload")#bg
+                                    p
+                                        h4 Find a CSV file on your computer.
+                                    span.btn.btn-default.btn-file
+                                        | Find File
+                                        input(type='file', value='Load Data From File', onchange='angular.element(this).scope().loadStudents(this)') Choose File
+                                    br
+                                    br
+                                    a Download A CSV Template
                         div(class='row')
                             div(class="col-sm-12")
                                 div#tableLike(ng-show='showForm')
-                                        p
-                                            h4 Below is the data from the file, please review and make changes if you wish, then click "Generate Report" when ready.
+                                        div(ng-show='showSuccess')
+                                            div(class='successContainer')
+                                                span(class="fa fa-check-circle fa-6") &nbsp; Success!
+                                                h4 You have successfuly added data. You can review & edit the data you provided below or just click "Generate Report".
                                         div(style='margin-bottom:10px')
-                                            button.btn.btn-success.btn-primary(ng-click='processStudents()') Generate Report
+                                            button.btn.btn-success.btn-primary(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
+                                        div( class='table-responsive')
+                                            table.table.mb30
+                                                thead
+                                                    tr
+                                                        th Student Name
+                                                        th Grade
+                                                        th Assessment 1
+                                                        th Assessment 2
+                                                        th Growth
+                                                        th % Growth
+                                                        th
 
-                                        div(style="font-size:18px;width:100%")
-                                            div(ng-repeat='student in students')
-                                                input(ng-model='student.name')
-                                                input(ng-model='student.grade')
-                                                input(ng-model='student.score1')
-                                                input(ng-model='student.score2')
-                                                label {{student.growth()}}
-                                                label {{ student.percentGrowth() | percentage:2}}
-                                            button.btn.btn-primary.btn-sm(ng-click='addStudent()') Add Row
-                                            button.btn.btn-primary.btn-sm(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
+                                                tbody
+                                                    tr(ng-repeat='student in students')
+                                                        td
+                                                            input(ng-model='student.name')
+                                                        td
+                                                            input(ng-model='student.grade')
+                                                        td
+                                                            input(ng-model='student.score1')
+                                                        td
+                                                            input(ng-model='student.score2')
+                                                        td
+                                                            label {{student.growth()}}
+                                                        td
+                                                            label {{ student.percentGrowth() | percentage:2}}
+                                                        td.table-action
+                                                            a.delete-row(href='')
+                                                                i.fa.fa-trash-o
+                                        button.btn.btn-primary.btn-sm(ng-click='addStudent()') Add Row
+                                        button.btn.btn-primary.btn-sm(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
                          div(class='row')
                             div(ng-show='showChart')
                                 button(ng-click='showLargeChart()') Large

@@ -322,6 +322,8 @@
         $scope.showForm = false;
         $scope.showChart = false;
         $scope.showFile = true;
+        $scope.showChoice = true;
+        $scope.showSuccess = false;
 
         $scope.$on('studentDataUpdated', function(){
             $scope.students = StudentData.Data;
@@ -364,8 +366,14 @@
                 //}
 
                 $scope.showForm=true;
+                $scope.showSuccess =true;
+                $scope.showChoice=false;
                 $scope.showFile = false;
                 $scope.$apply();
+                $('#one').addClass('numberCircleDone');
+                $('#two').addClass('numberCircleSelected');
+                $('#directionText').hide();
+
             };
             reader.readAsText(file);
         };
@@ -374,6 +382,14 @@
             StudentData.AddStudent(new Student());
         };
 
+        $scope.showInputForm = function(){
+
+            $scope.showForm=true;
+            $scope.showChoice = false;
+            $('#directionText').html('Enter Student Test Data | <a style="font-size: 12px;"  href="javascript:history.go(0)"> Find a CSV file on your computer</a>')
+
+        };
+""
         $scope.processStudents = function() {
             $scope.chartData = [];
             StudentData.Grades().forEach(function(value, idx, arr){
@@ -435,6 +451,13 @@
             for(var x=0;x<StudentData.Grades().length;x++) {
 
             }
+
+            $('#one').addClass('numberCircleDone');
+            $('#two').addClass('numberCircleDone');
+            $('#three').addClass('numberCircleSelected');
+            $('#directionText').hide();
+
+
         }
 
         $scope.showLargeChart = function(){
