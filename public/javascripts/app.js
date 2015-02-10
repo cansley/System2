@@ -32,40 +32,47 @@
         return {
             restrict: "E",
             transclude: true,
-            template: "<div id='chart' ng-show='showChart' style='{{chartStyle}}'></div>",
+            template: "<div id='chart{{grade}}' ng-show='showChart' style='{{chartStyle}}'></div>",
             link: function(scope, element, attrs){
-                // XY Chart
-                var chart = new AmCharts.AmXYChart();
-                chart.pathToImages = "/amcharts/images/";
-                //chart.dataProvider = chartData;
-                chart.startDuration = 0;
-                scope.chart = chart;
                 var chartGrade = attrs['grade'];
+                var chartName = 'chart' + chartGrade;
+
+                // XY Chart
+                if(typeof chart === 'undefined' || chart === null){
+                    var chart = [];
+                }
+
+                chart[chartGrade] = new AmCharts.AmXYChart();
+
+                chart[chartGrade].pathToImages = "/amcharts/images/";
+                //chart.dataProvider = chartData;
+                chart[chartGrade].startDuration = 0;
+                scope.chart = chart;
 
                 scope.$watch('chartStyle', function(val){
                     if(scope.chartData == undefined || scope.chartData == null) return;
-                    console.log('redrawing chart...');
-                    chart.write("chart");
+                    console.log('redrawing ' + chartName + '...');
+                    chart[chartGrade].write(chartName);
                 });
 
                 scope.$watch('chartData', function(val){
                     if(val== undefined || val == null) return;
-                    console.log('updating Chart data');
-                    chart.dataProvider = val[chartGrade];
+                    console.log('updating Chart data for ' + chartName);
+                    chart[chartGrade].dataProvider = val[chartGrade];
                     // AXES
                     // X
                     var xAxis = new AmCharts.ValueAxis();
                     xAxis.title = "Assessment 2";
                     xAxis.position = "bottom";
                     xAxis.autoGridCount = true;
-                    chart.addValueAxis(xAxis);
+                    chart[chartGrade].addValueAxis(xAxis);
 
                     // Y
                     var yAxis = new AmCharts.ValueAxis();
                     yAxis.title = "Growth";
                     yAxis.position = "left";
                     yAxis.autoGridCount = true;
-                    chart.addValueAxis(yAxis);
+                    chart[chartGrade].addValueAxis(yAxis);
 
 
                     // GRAPH
@@ -80,7 +87,7 @@
                     greenGraph.bulletSize = scope.bulletSize;
                     greenGraph.valueAxis="Not set";
                     greenGraph.balloonText = "Assessment 2:<b>[[x]]</b> Growth:<b>[[y]]</b><br>Student:<b>[[value]]</b>";
-                    chart.addGraph(greenGraph);
+                    chart[chartGrade].addGraph(greenGraph);
 
                     var redGraph = new AmCharts.AmGraph();
                     //graph.valueField = "value"; // valueField responsible for the size of a bullet
@@ -92,7 +99,7 @@
                     redGraph.bulletSize = scope.bulletSize;
                     redGraph.valueAxis="Not set";
                     redGraph.balloonText = "Assessment 2:<b>[[x]]</b> Growth:<b>[[y]]</b><br>Student:<b>[[value2]]</b>";
-                    chart.addGraph(redGraph);
+                    chart[chartGrade].addGraph(redGraph);
 
                     var blueGraph = new AmCharts.AmGraph();
                     //graph.valueField = "value"; // valueField responsible for the size of a bullet
@@ -105,11 +112,11 @@
                     blueGraph.valueAxis="Not set";
                     blueGraph.showBalloon = false;
                     //blueGraph.balloonText = "Assessment 2:<b>[[x]]</b> Growth:<b>[[y]]</b><br>Student:<b>[[value2]]</b>";
-                    chart.addGraph(blueGraph);
+                    chart[chartGrade].addGraph(blueGraph);
 
-                    chart.validateData();
-                    chart.validateNow();
-                    chart.write("chart");
+                    chart[chartGrade].validateData();
+                    chart[chartGrade].validateNow();
+                    chart[chartGrade].write(chartName);
                 });
             }
         };
@@ -157,12 +164,9 @@
         }
 
         studentData.DataByGrade = function(grade){
-            console.log(grade);
             if(typeof grade === 'undefined' || grade === null){
-                console.log('returning full dataset.');
                 return studentData.Data;
             }
-            console.log('returning filtered dataset for grade ' + grade + '.');
             return studentData.Data.filter(function(student){
                 if(student.grade === grade){
                     return true;
@@ -329,8 +333,6 @@
             StudentData.AddStudent(new Student('Student '+ x));
         }
 
-        console.log($scope.students);
-
         $scope.loadStudents = function(element){
             // read the file from the browser and populate students.
             var file = element.files[0];
@@ -347,19 +349,19 @@
                     }
                 }
 
-                for(var x = 0;x<StudentData.Grades().length;x++){
-                    var targetGrade = StudentData.Grades()[x];
-                    var topScore = StudentData.AverageScore(targetGrade) + StudentData.ScoresStandardDev(targetGrade);
-                    var bottomScore = StudentData.AverageScore(targetGrade) - StudentData.ScoresStandardDev(targetGrade);
-                    var topGrowth = StudentData.AverageGrowth(targetGrade) + StudentData.GrowthStandardDev(targetGrade);
-                    var bottomGrowth = StudentData.AverageGrowth(targetGrade) - StudentData.GrowthStandardDev(targetGrade);
-                    console.log('Score range: ' + bottomScore + ' to ' + topScore);
-                    console.log('Growth range: ' + bottomGrowth + ' to ' + topGrowth);
-                    console.log(StudentData.Plotpoints(targetGrade));
-                    console.log(StudentData.WithinStandardDevPlotpoints(targetGrade));
-                    console.log(StudentData.WithoutStandardDevPlotpoints(targetGrade));
-                    console.log(StudentData.Grades(targetGrade));
-                }
+                //for(var x = 0;x<StudentData.Grades().length;x++){
+                //    var targetGrade = StudentData.Grades()[x];
+                //    var topScore = StudentData.AverageScore(targetGrade) + StudentData.ScoresStandardDev(targetGrade);
+                //    var bottomScore = StudentData.AverageScore(targetGrade) - StudentData.ScoresStandardDev(targetGrade);
+                //    var topGrowth = StudentData.AverageGrowth(targetGrade) + StudentData.GrowthStandardDev(targetGrade);
+                //    var bottomGrowth = StudentData.AverageGrowth(targetGrade) - StudentData.GrowthStandardDev(targetGrade);
+                //    console.log('Score range: ' + bottomScore + ' to ' + topScore);
+                //    console.log('Growth range: ' + bottomGrowth + ' to ' + topGrowth);
+                //    console.log(StudentData.Plotpoints(targetGrade));
+                //    console.log(StudentData.WithinStandardDevPlotpoints(targetGrade));
+                //    console.log(StudentData.WithoutStandardDevPlotpoints(targetGrade));
+                //    console.log(StudentData.Grades(targetGrade));
+                //}
 
                 $scope.showForm=true;
                 $scope.showFile = false;
@@ -374,8 +376,8 @@
 
         $scope.processStudents = function() {
             $scope.chartData = [];
-            for(var x=0;x<StudentData.Grades().length;x++) {
-                var targetGrade = StudentData.Grades()[x];
+            StudentData.Grades().forEach(function(value, idx, arr){
+                var targetGrade = value;
                 var greenPoints = StudentData.WithinStandardDevPlotpoints(targetGrade);
                 var redPoints = StudentData.WithoutStandardDevPlotpoints(targetGrade);
                 var bluePoints = StudentData.TrendLinePoints(targetGrade).sort(function (a, b) {
@@ -429,6 +431,9 @@
                 }
 
                 $scope.chartData[targetGrade] = newChartData;
+            });
+            for(var x=0;x<StudentData.Grades().length;x++) {
+
             }
         }
 

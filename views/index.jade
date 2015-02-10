@@ -66,4 +66,5 @@ block content
                                 button(ng-click='showMedChart()') Medium
                                 button(ng-click='showSmallChart()') Small
                                 br
-                                am-chart(ng-repeat='grade in grades', grade='{{grade}}')
+                                div(ng-repeat='grade in grades')
+                                    am-chart(grade='{{grade}}')
