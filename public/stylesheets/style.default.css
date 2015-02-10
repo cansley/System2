@@ -3758,11 +3758,11 @@ div.error label.error:before {
 
 
 #choiceOne{
-    float:left;padding:30px;width:310px;height:310px;color:#000; background-color:rgba(73,153,204,0.3);
+    width:400px;height:280px;float:left;padding:30px;color:#000; background-color:rgba(73,153,204,0.3);
 }
 
 #choiceTwo{
-    float:left;padding:30px;max-width:310px;height:310px;color:#000; background-color:rgba(109,154,53,0.3);
+    width:400px;height:280px;float:left;padding:30px;color:#000; background-color:rgba(109,154,53,0.3);
 }
 
 #tableLike{
@@ -3779,7 +3779,7 @@ div.error label.error:before {
 }
 
 #tableLike div input{
-    width:200px;
+    width:125px;
     padding-left: 3px;
 
 
@@ -3813,3 +3813,89 @@ div.error label.error:before {
     cursor: inherit;
     display: block;
 }
+.numberCircle {
+    border-radius: 50%;
+    /*behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+
+    width: 55px;
+    height: 55px;
+    padding: 8px;
+
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+
+    font: 32px Arial, sans-serif;
+}
+
+.numberCircleSelected {
+    border-radius: 50%;
+    /*behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+
+    width: 55px;
+    height: 55px;
+    padding: 8px;
+
+    background: #008000;
+    border: 2px solid #fff;
+    color: #fff;
+    text-align: center;
+
+    font: 32px Arial, sans-serif;
+}
+
+.numberCircleDone {
+    border-radius: 50%;
+    /*behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+
+    width: 55px;
+    height: 55px;
+    padding: 8px;
+
+    background: #999;
+    border: 2px solid #999;
+    color: #666;
+    text-align: center;
+
+    font: 32px Arial, sans-serif;
+}
+
+.stepContainer{
+    height:150px;
+
+
+
+}
+.numberCircleContainer{
+    width:100px;
+    padding: 20px;
+    float:left;
+    margin-bottom: 40px;
+
+}
+
+.numberCircleContainerText{
+    text-align:center;
+    position:relative;
+    left:0;top:15px;
+
+}
+
+.successContainer{
+
+    font-size:30px;
+    padding:15px;
+    background: rgba(255, 255, 190, 0.8);
+    min-width:310px;
+    max-width:800px;
+    margin-top:15px;
+    margin-bottom:15px;
+
+}
+
+#bg{
+
+    font-size: 30px;
+}
+
