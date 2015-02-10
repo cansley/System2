@@ -3758,11 +3758,11 @@ div.error label.error:before {
 
 
 #choiceOne{
-    width:400px;height:280px;float:left;padding:30px;color:#000; background-color:rgba(73,153,204,0.3);
+    width:400px;height:200px;float:left;padding:30px;color:#000; background-color:rgba(73,153,204,0.3);
 }
 
 #choiceTwo{
-    width:400px;height:280px;float:left;padding:30px;color:#000; background-color:rgba(109,154,53,0.3);
+    width:400px;height:200px;float:left;padding:30px;color:#000; background-color:rgba(109,154,53,0.3);
 }
 
 #tableLike{
@@ -3781,7 +3781,6 @@ div.error label.error:before {
 #tableLike div input{
     width:125px;
     padding-left: 3px;
-
 
 
 }
@@ -3820,7 +3819,7 @@ div.error label.error:before {
     width: 55px;
     height: 55px;
     padding: 8px;
-
+    margin-left:46px;
     background: #fff;
     border: 2px solid #666;
     color: #666;
@@ -3836,7 +3835,7 @@ div.error label.error:before {
     width: 55px;
     height: 55px;
     padding: 8px;
-
+    margin-left:46px;
     background: #008000;
     border: 2px solid #fff;
     color: #fff;
@@ -3852,6 +3851,7 @@ div.error label.error:before {
     width: 55px;
     height: 55px;
     padding: 8px;
+    margin-left:46px;
 
     background: #999;
     border: 2px solid #999;
@@ -3862,23 +3862,30 @@ div.error label.error:before {
 }
 
 .stepContainer{
-    height:150px;
+    height:110px;
+    background: #fff;
+    position:relative;
+    top:0;
+    padding-left:0px;
+    width:100%;
 
 
 
 }
 .numberCircleContainer{
     width:100px;
-    padding: 20px;
+    padding: 10px;
     float:left;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 
 }
 
 .numberCircleContainerText{
     text-align:center;
+    display: block;
     position:relative;
     left:0;top:15px;
+    width:150px;
 
 }
 
@@ -3888,7 +3895,7 @@ div.error label.error:before {
     padding:15px;
     background: rgba(255, 255, 190, 0.8);
     min-width:310px;
-    max-width:800px;
+    width:100%;
     margin-top:15px;
     margin-bottom:15px;
 
@@ -3899,3 +3906,14 @@ div.error label.error:before {
     font-size: 30px;
 }
 
+.responsive-container {
+    position: relative;
+    padding-bottom: 60%; /* the higher the bigger the ratio */
+}
+.responsive-container > div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}

@@ -29,18 +29,17 @@ block content
             div(class="pageheader")
                 h2 3 Easy Steps
             div(class="contentpanel")
-                div()
                     div(class='row')
                         div(class='stepContainer')
-                            div(class='col-xs-3 col-sm-4 col-md-4')
+                            div(class='col-xs-3 col-sm-4 col-lg-4')
                                 div(class='numberCircleContainer')
                                     div(class='numberCircleSelected')#one 1
                                     div(class='numberCircleContainerText') Add Data
-                            div(class='col-xs-3 col-sm-4 col-md-4')
+                            div(class='col-xs-3 col-sm-4 col-lg-4')
                                 div(class='numberCircleContainer')
                                     div(class='numberCircle')#two 2
                                     div(class='numberCircleContainerText') Generate Report
-                            div(class='col-xs-3 col-sm-4 col-md-4')
+                            div(class='col-xs-3 col-sm-4 col-lg-4')
                                 div(class='numberCircleContainer')
                                     div(class='numberCircle')#three 3
                                     div(class='numberCircleContainerText') View Report
@@ -111,4 +110,6 @@ block content
                                 button(ng-click='showSmallChart()') Small
                                 br
                                 div(ng-repeat='grade in grades')
-                                    am-chart(grade='{{grade}}')
+                                    div(class="responsive-container")
+                                        div#chartdiv
+                                            am-chart(grade='{{grade}}')

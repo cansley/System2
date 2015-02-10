@@ -383,13 +383,10 @@
         };
 
         $scope.showInputForm = function(){
-
             $scope.showForm=true;
             $scope.showChoice = false;
-            $('#directionText').html('Enter Student Test Data | <a style="font-size: 12px;"  href="javascript:history.go(0)"> Find a CSV file on your computer</a>')
-
+            $('#directionText').html('Enter Student Test Data | <a style="font-size: 12px;"  href="javascript:history.go(0)"> Go Back, and upload a CSV File </a>')
         };
-""
         $scope.processStudents = function() {
             $scope.chartData = [];
             StudentData.Grades().forEach(function(value, idx, arr){
