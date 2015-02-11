@@ -318,7 +318,7 @@
         $scope.students = [];
         $scope.grades = [];
         $scope.bulletSize = 10;
-        $scope.chartStyle = "width: 800px; height: 600px;";
+        $scope.chartStyle = "width: 360px; height: 280px;";
         $scope.showForm = false;
         $scope.showChart = false;
         $scope.showFile = true;
@@ -364,6 +364,8 @@
                 //    console.log(StudentData.WithoutStandardDevPlotpoints(targetGrade));
                 //    console.log(StudentData.Grades(targetGrade));
                 //}
+
+
 
                 $scope.showForm=true;
                 $scope.showSuccess =true;
@@ -449,6 +451,7 @@
 
             }
 
+
             $('#one').addClass('numberCircleDone');
             $('#two').addClass('numberCircleDone');
             $('#three').addClass('numberCircleSelected');
@@ -471,5 +474,9 @@
             $scope.bulletSize = 1;
             $scope.chartStyle =  "width: 300px; height: 200px;";
         }
+
+
+
+
     });
 })();

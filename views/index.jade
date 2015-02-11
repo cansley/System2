@@ -45,24 +45,26 @@ block content
                                     div(class='numberCircleContainerText') View Report
                     h4#directionText Choose how you will add test data.
                     div(ng-controller='sys2Ctrl')
-                        div(class="row")
-                            div(ng-show='showChoice')
-                                div#choiceOne
-                                    div(ng-show='showFile')
-                                    i(class="fa fa-pencil-square-o")#bg
-                                    p
-                                        h4 Fill out web form
-                                        button.btn.btn-primary.btn-lg(ng-click='showInputForm()') Start
-                                div#choiceTwo
-                                    i(class="fa fa-cloud-upload")#bg
-                                    p
-                                        h4 Find a CSV file on your computer.
-                                    span.btn.btn-default.btn-file
-                                        | Find File
-                                        input(type='file', value='Load Data From File', onchange='angular.element(this).scope().loadStudents(this)') Choose File
-                                    br
-                                    br
-                                    a Download A CSV Template
+                        div(ng-show='showChoice')
+                            div(class="row no-gutter")
+                                div(class='col-sm-6 col-md-4')
+                                    div#choiceOne
+                                        div(ng-show='showFile')
+                                        i(class="fa fa-pencil-square-o")#bg
+                                        p
+                                            h4 Fill out web form
+                                            button.btn.btn-primary.btn-lg(ng-click='showInputForm()') Start
+                                div(class='col-sm-6 col-md-4')
+                                    div#choiceTwo
+                                        i(class="fa fa-cloud-upload")#bg
+                                        p
+                                            h4 Find a CSV file on your computer.
+                                        span.btn.btn-default.btn-file
+                                            | Find File
+                                            input(type='file', value='Load Data From File', onchange='angular.element(this).scope().loadStudents(this)') Choose File
+                                        br
+                                        br
+                                        a Download A CSV Template
                         div(class='row')
                             div(class="col-sm-12")
                                 div#tableLike(ng-show='showForm')
@@ -109,7 +111,11 @@ block content
                                 button(ng-click='showMedChart()') Medium
                                 button(ng-click='showSmallChart()') Small
                                 br
-                                div(ng-repeat='grade in grades')
-                                    div(class="responsive-container")
-                                        div#chartdiv
-                                            am-chart(grade='{{grade}}')
+                                div.row(ng-repeat='array in grades')
+                                    div.col-md-6.col-xs-12.col-sm-6(ng-repeat='grade in grades')
+                                        div(class="responsive-container")
+                                            div#chartdiv
+                                                am-chart(grade='{{grade}}')
+                                                button.btn.btn-primary.btn.lg(style='width:320px;margin-left:15px') View Larger Chart
+
+
