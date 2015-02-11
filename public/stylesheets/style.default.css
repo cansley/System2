@@ -3925,6 +3925,7 @@ div.error label.error:before {
 .responsive-container {
     position: relative;
     padding-bottom: 60%; /* the higher the bigger the ratio */
+
 }
 .responsive-container > div {
     position: absolute;
@@ -3933,6 +3934,14 @@ div.error label.error:before {
     bottom: 0;
     left: 0;
     padding:66px;
+}
+
+#chartdiv{
+
+    //background: #fff;
+
+
+
 }
 
 .no-gutter > [class*='col-'] {
