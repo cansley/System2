@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c7c02fd6-fbb3-4537-9671-29c876af6a18" name="Default" comment="further style changes">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/app.js" afterPath="$PROJECT_DIR$/public/javascripts/app.js" />
+    <list default="true" id="c7c02fd6-fbb3-4537-9671-29c876af6a18" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.jade" afterPath="$PROJECT_DIR$/views/index.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/style.default.css" afterPath="$PROJECT_DIR$/public/stylesheets/style.default.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="System2.iws" />
@@ -29,11 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.jade" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.jade" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/index.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.259259" vertical-offset="1493" max-vertical-offset="1905">
-              <caret line="118" column="113" selection-start-line="118" selection-start-column="113" selection-end-line="118" selection-end-column="113" />
+            <state vertical-scroll-proportion="0.7251309" vertical-offset="1493" max-vertical-offset="1905">
+              <caret line="118" column="78" selection-start-line="118" selection-start-column="78" selection-end-line="118" selection-end-column="78" />
               <folding />
             </state>
           </provider>
@@ -59,10 +57,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/javascripts/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.2827225" vertical-offset="5033" max-vertical-offset="5415">
+            <state vertical-scroll-proportion="73.62963" vertical-offset="5003" max-vertical-offset="5415">
               <caret line="327" column="52" selection-start-line="327" selection-start-column="52" selection-end-line="327" selection-end-column="52" />
               <folding>
                 <element signature="e#6177#10915#0" expanded="false" />
@@ -475,7 +473,13 @@
       <option name="project" value="LOCAL" />
       <updated>1423609203843</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Work on chart placement">
+      <created>1423639016385</created>
+      <option name="number" value="00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1423639016385</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -551,7 +555,8 @@
     <MESSAGE value="updated fonts" />
     <MESSAGE value="Massive update to the freaking app...hiding a showing stuff, add tables..that's right I used tables..." />
     <MESSAGE value="further style changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="further style changes" />
+    <MESSAGE value="Work on chart placement" />
+    <option name="LAST_COMMIT_MESSAGE" value="Work on chart placement" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -739,23 +744,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.259259" vertical-offset="1493" max-vertical-offset="1905">
-          <caret line="118" column="113" selection-start-line="118" selection-start-column="113" selection-end-line="118" selection-end-column="113" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.2827225" vertical-offset="5033" max-vertical-offset="5415">
+        <state vertical-scroll-proportion="73.62963" vertical-offset="5003" max-vertical-offset="5415">
           <caret line="327" column="52" selection-start-line="327" selection-start-column="52" selection-end-line="327" selection-end-column="52" />
           <folding>
             <element signature="e#6177#10915#0" expanded="false" />
             <marker date="1423637945000" expanded="true" signature="1167:1181" placeholder="..." />
             <marker date="1423637945000" expanded="true" signature="15348:15364" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7251309" vertical-offset="1493" max-vertical-offset="1905">
+          <caret line="118" column="78" selection-start-line="118" selection-start-column="78" selection-end-line="118" selection-end-column="78" />
+          <folding />
         </state>
       </provider>
     </entry>

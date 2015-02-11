@@ -107,15 +107,15 @@ block content
                                         button.btn.btn-primary.btn-sm(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
                          div(class='row')
                             div(ng-show='showChart')
-                                button(ng-click='showLargeChart()') Large
-                                button(ng-click='showMedChart()') Medium
-                                button(ng-click='showSmallChart()') Small
+                                //button(ng-click='showLargeChart()') Large
+                                //button(ng-click='showMedChart()') Medium
+                                //button(ng-click='showSmallChart()') Small
                                 br
                                 div.row(ng-repeat='array in grades')
                                     div.col-md-6.col-xs-12.col-sm-6(ng-repeat='grade in grades')
                                         div(class="responsive-container")
                                             div#chartdiv
                                                 am-chart(grade='{{grade}}')
-                                                button.btn.btn-primary.btn.lg(style='width:320px;margin-left:15px') View Larger Chart
+                                                button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px' ) View Larger Chart
 
 
