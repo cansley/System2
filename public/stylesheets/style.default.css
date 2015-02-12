@@ -3766,28 +3766,25 @@ div.error label.error:before {
 }
 
 #tableLike{
-    width:100%;
+   ;
 
 
 }
 
 #tableLike div{
-    width:100%;
-    line-height: 45px;
+
 
 
 }
 
 #tableLike div input{
-    width:125px;
-    padding-left: 3px;
+
 
 
 }
 
 #tableLike div label{
-    width:70px;
-    padding-left: 8px;
+
 
 
 }
@@ -3936,13 +3933,7 @@ div.error label.error:before {
     padding:66px;
 }
 
-#chartdiv{
 
-    //background: #fff;
-
-
-
-}
 
 .no-gutter > [class*='col-'] {
     padding-right:0;
@@ -3950,3 +3941,97 @@ div.error label.error:before {
 }
 
 
+/*
+Generic Styling, for Desktops/Laptops
+*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+/* Zebra striping */
+tr:nth-of-type(odd) {
+    background: #eee;
+}
+th {
+    background: #333;
+    color: white;
+    font-weight: bold;
+}
+td, th {
+    padding: 6px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr { border: 1px solid #ccc; }
+
+    td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
+
+    /*
+    Label the data
+    */
+    td:nth-of-type(1):before { content: "Student Name"; }
+    td:nth-of-type(2):before { content: "Grade"; }
+    td:nth-of-type(3):before { content: "Assessment 1"; }
+    td:nth-of-type(4):before { content: "Assessment 2"; }
+    td:nth-of-type(5):before { content: "Growth"; }
+    td:nth-of-type(6):before { content: "% Growth"; }
+
+
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+    body {
+        padding: 0;
+        margin: 0;
+        width: 320px; }
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    body {
+        width: 495px;
+    }
+}
+@media only screen and (max-width: 320px) {
+
+    body { font-size: 1.1em; }
+
+}

@@ -21,7 +21,7 @@ block content
                 a(class="menutoggle")
                     i(class="fa fa-bars")
                 div(class='header-left')
-                    h3(style='padding-left:10px;') System 2
+                    h3(style='font-size:100%;padding-left:10px;') System 2
                 div(class="header-right")
                     div#appbuttons
                         button.btn.btn-success.btn-primary(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
@@ -74,8 +74,8 @@ block content
                                                 h4 You have successfuly added data. You can review & edit the data you provided below or just click "Generate Report".
                                         div(style='margin-bottom:10px')
                                             button.btn.btn-success.btn-primary(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
-                                        div( class='table-responsive')
-                                            table.table.mb30
+                                        div(class='' )
+                                            table
                                                 thead
                                                     tr
                                                         th Student Name
