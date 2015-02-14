@@ -3,6 +3,7 @@ block head
     script(src='bower_components/angular/angular.js')
     script(src='amcharts/amcharts.js')
     script(src='amcharts/xy.js')
+    script(src='amcharts/serial.js')
     script(src='javascripts/regression.js')
     script(src='javascripts/app.js')
     script(src='javascripts/jquery-1.11.1.min.js')
@@ -111,11 +112,16 @@ block content
                                 //button(ng-click='showMedChart()') Medium
                                 //button(ng-click='showSmallChart()') Small
                                 br
-                                div.row
-                                    div.col-md-6.col-xs-12.col-sm-6(ng-repeat='grade in grades')
+                                div.row(ng-repeat='grade in grades')
+                                    div.col-md-6.col-xs-12.col-sm-6
                                         div(class="responsive-container")
                                             div#chartdiv
                                                 xy-chart(grade='{{grade}}')
+                                                button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px' ) View Larger Chart
+                                    div.col-md-6.col-xs-12.col-sm-6
+                                        div(class="responsive-container")
+                                            div#chartdiv
+                                                line-chart(grade='{{grade}}')
                                                 button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px' ) View Larger Chart
 
 

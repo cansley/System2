@@ -4,11 +4,13 @@
 (function(){
     'use strict';
     var system2 = angular.module("system2",[]);
+
     system2.filter('percentage', ['$filter', function($filter){
         return function(input, decimals){
             return $filter('number')(input * 100, decimals) + '%';
         };
     }]);
+
     system2.directive("fileread", [function () {
         return {
             scope: {
@@ -127,89 +129,91 @@
                 var chartName = 'linechart' + chartGrade;
 
                 // XY Chart
-                if(typeof chart === 'undefined' || chart === null){
-                    var chart = [];
+                if(typeof lineChart === 'undefined' || lineChart === null){
+                    var lineChart = [];
                 }
 
-                chart[chartGrade] = new AmCharts.AmSerialChart();
+                lineChart[chartGrade] = new AmCharts.AmSerialChart();
+                var wc = lineChart[chartGrade];
 
-                chart[chartGrade].pathToImages = "/amcharts/images/";
-                //chart.dataProvider = chartData;
-                chart[chartGrade].startDuration = 0;
-                //scope.chart = chart;
+                wc.pathToImages = "/amcharts/images/";
+                wc.startDuration = 0;
+                wc.autoMarginOffset = 40;
+                wc.marginBottom = 50;
+                wc.title
 
                 scope.$watch('chartStyle', function(val){
-                    if(scope.xychartData == undefined || scope.xychartData == null) return;
+                    if(scope.linechartData == undefined || scope.linechartData == null) return;
                     console.log('redrawing ' + chartName + '...');
-                    chart[chartGrade].write(chartName);
+                    lineChart[chartGrade].write(chartName);
                 });
 
-                scope.$watch('xychartData', function(val){
+                scope.$watch('linechartData', function(val){
                     if(val== undefined || val == null) return;
                     console.log('updating Chart data for ' + chartName);
-                    chart[chartGrade].dataProvider = val[chartGrade];
+                    wc.dataProvider = val[chartGrade];
                     // AXES
-                    // X
-                    var category = new AmCharts.CategoryAxis();
-                    category.position = "bottom";
-                    category.field = "student";
+                    // Category
+                    var category = wc.categoryAxis;
+                    category.autoRotateAngle = 0;
+                    category.labelRotation = 90;
+                    //category.labelOffset = 60;
+                    wc.categoryField = "student";
 
-                    var xAxis = new AmCharts.ValueAxis();
-                    xAxis.title = "";
-                    xAxis.position = "bottom";
-                    xAxis.autoGridCount = true;
-                    chart[chartGrade].addCategoryAxis(xAxis);
+                    var scoreAxis = new AmCharts.ValueAxis();
+                    scoreAxis.title = "Score";
+                    scoreAxis.position = "left";
+                    scoreAxis.id = "aScore";
+                    wc.addValueAxis(scoreAxis);
 
-                    // Y
-                    var yAxis = new AmCharts.ValueAxis();
-                    yAxis.title = "Growth";
-                    yAxis.position = "left";
-                    yAxis.autoGridCount = true;
-                    chart[chartGrade].addValueAxis(yAxis);
+                    // growth
+                    var growthAxis = new AmCharts.ValueAxis();
+                    growthAxis.title = "Growth";
+                    growthAxis.position = "right";
+                    growthAxis.id = "aGrowth";
+                    wc.addValueAxis(growthAxis);
+
+                    // logarithmic trend
+                    //var tLog = new AmCharts.ValueAxis();
+                    //tLog.id = "aLog";
+                    //tLog.position = "right";
+                    //wc.addValueAxis(tLog);
 
 
-                    // GRAPH
-                    var greenGraph = new AmCharts.AmGraph();
-                    //graph.valueField = "value"; // valueField responsible for the size of a bullet
-                    greenGraph.xField = "x";
-                    greenGraph.xAxis = "x";
-                    greenGraph.yField = "y";
-                    greenGraph.lineAlpha = 0;
-                    greenGraph.lineColor = '#B1D62B';
-                    greenGraph.bulletField = 'bullet';
-                    greenGraph.bulletSize = scope.bulletSize;
-                    greenGraph.valueAxis="Not set";
-                    greenGraph.balloonText = "Assessment 2:<b>[[x]]</b> Growth:<b>[[y]]</b><br>Student:<b>[[value]]</b>";
-                    chart[chartGrade].addGraph(greenGraph);
+                    // GRAPHS
+                    var gScore = new AmCharts.AmGraph();
+                    gScore.columnWidth = 1;
+                    gScore.cornerRadiusTop = 8;
+                    gScore.dashLength = 4;
+                    gScore.fillAlphas = 1;
+                    gScore.id = "gScore";
+                    gScore.lineAlpha = 1;
+                    gScore.type = "column";
+                    gScore.valueField = "score";
+                    wc.addGraph(gScore);
 
-                    var redGraph = new AmCharts.AmGraph();
-                    //graph.valueField = "value"; // valueField responsible for the size of a bullet
-                    redGraph.xField = "x2";
-                    redGraph.yField = "y2";
-                    redGraph.lineAlpha = 0;
-                    redGraph.lineColor = '#ff0000';
-                    redGraph.bulletField = 'bullet2';
-                    redGraph.bulletSize = scope.bulletSize;
-                    redGraph.valueAxis="Not set";
-                    redGraph.balloonText = "Assessment 2:<b>[[x]]</b> Growth:<b>[[y]]</b><br>Student:<b>[[value2]]</b>";
-                    chart[chartGrade].addGraph(redGraph);
+                    var gGrowth = new AmCharts.AmGraph();
+                    gGrowth.bullet = "square";
+                    gGrowth.bulletSize = 5;
+                    gGrowth.id = "gGrowth";
+                    gGrowth.title = "Growth";
+                    gGrowth.valueAxis = "aGrowth";
+                    gGrowth.valueField = "growth";
+                    wc.addGraph(gGrowth);
 
-                    var blueGraph = new AmCharts.AmGraph();
-                    //graph.valueField = "value"; // valueField responsible for the size of a bullet
-                    blueGraph.xField = "x3";
-                    blueGraph.yField = "y3";
-                    //blueGraph.lineAlpha = 0;
-                    blueGraph.lineColor = '#0000ff';
-                    blueGraph.bulletField = 'bullet3';
-                    blueGraph.bulletSize = 1;
-                    blueGraph.valueAxis="Not set";
-                    blueGraph.showBalloon = false;
-                    //blueGraph.balloonText = "Assessment 2:<b>[[x]]</b> Growth:<b>[[y]]</b><br>Student:<b>[[value2]]</b>";
-                    chart[chartGrade].addGraph(blueGraph);
+                    //var gTrend = new AmCharts.AmGraph();
+                    //gTrend.bullet = "round";
+                    //gTrend.id = "gTrend";
+                    //gTrend.title = "";
+                    //gTrend.valueAxis = "aLog";
+                    //gTrend.valueField = "trend";
+                    //wc.addGraph(gTrend);
 
-                    chart[chartGrade].validateData();
-                    chart[chartGrade].validateNow();
-                    chart[chartGrade].write(chartName);
+
+
+                    lineChart[chartGrade].validateData();
+                    lineChart[chartGrade].validateNow();
+                    lineChart[chartGrade].write(chartName);
                 });
             }
         };
@@ -485,6 +489,7 @@
         };
         $scope.processStudents = function() {
             $scope.xychartData = [];
+            $scope.linechartData = [];
             StudentData.Grades().forEach(function(value, idx, arr){
                 var targetGrade = value;
                 var greenPoints = StudentData.WithinStandardDevPlotpoints(targetGrade);
@@ -540,6 +545,19 @@
                 }
 
                 $scope.xychartData[targetGrade] = newChartData;
+
+                // build the line chart data;
+                var newLineData = [];
+                StudentData.Plotpoints(targetGrade).sort(function(a,b){return a[0]-b[0]}).forEach(function(value, idx, arr){
+                    var obj = {};
+                    obj.student = value[2];
+                    obj.score = value[0];
+                    obj.growth = value[1];
+                    obj.trend = value[0]; // dummy placeholder for now.
+                    newLineData.push(obj);
+                });
+
+                $scope.linechartData[targetGrade] = newLineData;
             });
 
 
@@ -565,9 +583,5 @@
             $scope.bulletSize = 1;
             $scope.chartStyle =  "width: 300px; height: 200px;";
         }
-
-
-
-
     });
 })();
