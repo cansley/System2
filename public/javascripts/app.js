@@ -28,14 +28,14 @@
         }
     }]);
 
-    system2.directive("amChart", function(){
+    system2.directive("xyChart", function(){
         return {
             restrict: "E",
             transclude: true,
-            template: "<div id='chart{{grade}}' ng-show='showChart' style='{{chartStyle}}'></div>",
+            template: "<div id='xychart{{grade}}' ng-show='showChart' style='{{chartStyle}}'></div>",
             link: function(scope, element, attrs){
                 var chartGrade = attrs['grade'];
-                var chartName = 'chart' + chartGrade;
+                var chartName = 'xychart' + chartGrade;
 
                 // XY Chart
                 if(typeof chart === 'undefined' || chart === null){
@@ -43,19 +43,19 @@
                 }
 
                 chart[chartGrade] = new AmCharts.AmXYChart();
-
                 chart[chartGrade].pathToImages = "/amcharts/images/";
-                //chart.dataProvider = chartData;
                 chart[chartGrade].startDuration = 0;
-                scope.chart = chart;
+                chart[chartGrade].autoMargins = false;
+                chart[chartGrade].marginLeft = 50;
+                chart[chartGrade].marginBottom = 50;
 
                 scope.$watch('chartStyle', function(val){
-                    if(scope.chartData == undefined || scope.chartData == null) return;
+                    if(scope.xychartData == undefined || scope.xychartData == null) return;
                     console.log('redrawing ' + chartName + '...');
                     chart[chartGrade].write(chartName);
                 });
 
-                scope.$watch('chartData', function(val){
+                scope.$watch('xychartData', function(val){
                     if(val== undefined || val == null) return;
                     console.log('updating Chart data for ' + chartName);
                     chart[chartGrade].dataProvider = val[chartGrade];
@@ -66,6 +66,99 @@
                     xAxis.position = "bottom";
                     xAxis.autoGridCount = true;
                     chart[chartGrade].addValueAxis(xAxis);
+
+                    // Y
+                    var yAxis = new AmCharts.ValueAxis();
+                    yAxis.title = "Growth";
+                    yAxis.position = "left";
+                    yAxis.autoGridCount = true;
+                    chart[chartGrade].addValueAxis(yAxis);
+
+
+                    // GRAPH
+                    var greenGraph = new AmCharts.AmGraph();
+                    greenGraph.xField = "x";
+                    greenGraph.xAxis = "x";
+                    greenGraph.yField = "y";
+                    greenGraph.lineAlpha = 0;
+                    greenGraph.lineColor = '#B1D62B';
+                    greenGraph.bulletField = 'bullet';
+                    greenGraph.bulletSize = scope.bulletSize;
+                    greenGraph.valueAxis="Not set";
+                    greenGraph.balloonText = "Assessment 2:<b>[[x]]</b> Growth:<b>[[y]]</b><br>Student:<b>[[value]]</b>";
+                    chart[chartGrade].addGraph(greenGraph);
+
+                    var redGraph = new AmCharts.AmGraph();
+                    redGraph.xField = "x2";
+                    redGraph.yField = "y2";
+                    redGraph.lineAlpha = 0;
+                    redGraph.lineColor = '#ff0000';
+                    redGraph.bulletField = 'bullet2';
+                    redGraph.bulletSize = scope.bulletSize;
+                    redGraph.valueAxis="Not set";
+                    redGraph.balloonText = "Assessment 2:<b>[[x]]</b> Growth:<b>[[y]]</b><br>Student:<b>[[value2]]</b>";
+                    chart[chartGrade].addGraph(redGraph);
+
+                    var blueGraph = new AmCharts.AmGraph();
+                    blueGraph.xField = "x3";
+                    blueGraph.yField = "y3";
+                    blueGraph.lineColor = '#0000ff';
+                    blueGraph.bulletField = 'bullet3';
+                    blueGraph.bulletSize = 1;
+                    blueGraph.valueAxis="Not set";
+                    blueGraph.showBalloon = false;
+                    chart[chartGrade].addGraph(blueGraph);
+
+                    chart[chartGrade].validateData();
+                    chart[chartGrade].validateNow();
+                    chart[chartGrade].write(chartName);
+                });
+            }
+        };
+    });
+
+    system2.directive("lineChart", function(){
+        return {
+            restrict: "E",
+            transclude: true,
+            template: "<div id='linechart{{grade}}' ng-show='showChart' style='{{chartStyle}}'></div>",
+            link: function(scope, element, attrs){
+                var chartGrade = attrs['grade'];
+                var chartName = 'linechart' + chartGrade;
+
+                // XY Chart
+                if(typeof chart === 'undefined' || chart === null){
+                    var chart = [];
+                }
+
+                chart[chartGrade] = new AmCharts.AmSerialChart();
+
+                chart[chartGrade].pathToImages = "/amcharts/images/";
+                //chart.dataProvider = chartData;
+                chart[chartGrade].startDuration = 0;
+                //scope.chart = chart;
+
+                scope.$watch('chartStyle', function(val){
+                    if(scope.xychartData == undefined || scope.xychartData == null) return;
+                    console.log('redrawing ' + chartName + '...');
+                    chart[chartGrade].write(chartName);
+                });
+
+                scope.$watch('xychartData', function(val){
+                    if(val== undefined || val == null) return;
+                    console.log('updating Chart data for ' + chartName);
+                    chart[chartGrade].dataProvider = val[chartGrade];
+                    // AXES
+                    // X
+                    var category = new AmCharts.CategoryAxis();
+                    category.position = "bottom";
+                    category.field = "student";
+
+                    var xAxis = new AmCharts.ValueAxis();
+                    xAxis.title = "";
+                    xAxis.position = "bottom";
+                    xAxis.autoGridCount = true;
+                    chart[chartGrade].addCategoryAxis(xAxis);
 
                     // Y
                     var yAxis = new AmCharts.ValueAxis();
@@ -121,6 +214,7 @@
             }
         };
     });
+
 
     system2.factory('Student', function(){
         function Student(name, grade, score1, score2){
@@ -390,7 +484,7 @@
             $('#directionText').html('Enter Student Test Data | <a style="font-size: 12px;"  href="javascript:history.go(0)"> Go Back, and upload a CSV File </a>')
         };
         $scope.processStudents = function() {
-            $scope.chartData = [];
+            $scope.xychartData = [];
             StudentData.Grades().forEach(function(value, idx, arr){
                 var targetGrade = value;
                 var greenPoints = StudentData.WithinStandardDevPlotpoints(targetGrade);
@@ -445,11 +539,8 @@
                     newChartData.push(dataObj);
                 }
 
-                $scope.chartData[targetGrade] = newChartData;
+                $scope.xychartData[targetGrade] = newChartData;
             });
-            for(var x=0;x<StudentData.Grades().length;x++) {
-
-            }
 
 
             $('#one').addClass('numberCircleDone');

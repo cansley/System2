@@ -97,9 +97,9 @@ block content
                                                         td
                                                             input(ng-model='student.score2')
                                                         td
-                                                            label {{student.growth()}}
+                                                            label {{student.score2 - student.score1}}
                                                         td
-                                                            label {{ student.percentGrowth() | percentage:2}}
+                                                            label {{ (student.score2 - student.score1)/student.score2 | percentage:2}}
                                                         td.table-action
                                                             a.delete-row(href='')
                                                                 i.fa.fa-trash-o
@@ -111,11 +111,11 @@ block content
                                 //button(ng-click='showMedChart()') Medium
                                 //button(ng-click='showSmallChart()') Small
                                 br
-                                div.row(ng-repeat='array in grades')
+                                div.row
                                     div.col-md-6.col-xs-12.col-sm-6(ng-repeat='grade in grades')
                                         div(class="responsive-container")
                                             div#chartdiv
-                                                am-chart(grade='{{grade}}')
+                                                xy-chart(grade='{{grade}}')
                                                 button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px' ) View Larger Chart
 
 
