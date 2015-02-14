@@ -34,7 +34,7 @@
         return {
             restrict: "E",
             transclude: true,
-            template: "<div id='xychart{{grade}}' ng-show='showChart' style='{{chartStyle}}'></div>",
+            template: "<div id='xychart{{grade}}' ng-show='showChart' ng-style='{{chartStyle}}'></div>",
             link: function(scope, element, attrs){
                 var chartGrade = attrs['grade'];
                 var chartName = 'xychart' + chartGrade;
@@ -48,8 +48,8 @@
                 chart[chartGrade].pathToImages = "/amcharts/images/";
                 chart[chartGrade].startDuration = 0;
                 chart[chartGrade].autoMargins = false;
-                chart[chartGrade].marginLeft = 50;
-                chart[chartGrade].marginBottom = 50;
+                chart[chartGrade].marginLeft = 60;
+                chart[chartGrade].marginBottom = 60;
 
                 scope.$watch('chartStyle', function(val){
                     if(scope.xychartData == undefined || scope.xychartData == null) return;
@@ -111,9 +111,11 @@
                     blueGraph.showBalloon = false;
                     chart[chartGrade].addGraph(blueGraph);
 
-                    chart[chartGrade].validateData();
-                    chart[chartGrade].validateNow();
                     chart[chartGrade].write(chartName);
+                    chart[chartGrade].validateData();
+
+                    // check me out, too fast for AmCharts!
+                    setTimeout(function(){ chart[chartGrade].validateNow(); }, 1000);
                 });
             }
         };
@@ -123,7 +125,7 @@
         return {
             restrict: "E",
             transclude: true,
-            template: "<div id='linechart{{grade}}' ng-show='showChart' style='{{chartStyle}}'></div>",
+            template: "<div id='linechart{{grade}}' ng-show='showChart' ng-style='{{chartStyle}}'></div>",
             link: function(scope, element, attrs){
                 var chartGrade = attrs['grade'];
                 var chartName = 'linechart' + chartGrade;
@@ -138,9 +140,11 @@
 
                 wc.pathToImages = "/amcharts/images/";
                 wc.startDuration = 0;
+                wc.autoMargins = false;
                 wc.autoMarginOffset = 40;
-                wc.marginBottom = 50;
-                wc.title
+                wc.marginBottom = 100;
+                wc.marginLeft = 60;
+                wc.marginRight = 60;
 
                 scope.$watch('chartStyle', function(val){
                     if(scope.linechartData == undefined || scope.linechartData == null) return;
@@ -212,8 +216,9 @@
 
 
                     lineChart[chartGrade].validateData();
-                    lineChart[chartGrade].validateNow();
                     lineChart[chartGrade].write(chartName);
+                    // check me out, too fast for AmCharts!
+                    setTimeout(function(){ lineChart[chartGrade].validateNow(); }, 1000);
                 });
             }
         };
@@ -416,7 +421,7 @@
         $scope.students = [];
         $scope.grades = [];
         $scope.bulletSize = 10;
-        $scope.chartStyle = "width: 360px; height: 280px;";
+        $scope.chartStyle = {"width": "360px", "height": "280px"};
         $scope.showForm = false;
         $scope.showChart = false;
         $scope.showFile = true;
