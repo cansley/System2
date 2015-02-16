@@ -18,7 +18,7 @@ block head
     script(src='javascripts/custom.js')
 block content
     section()
-        div(class='mainpanel')
+        div.mainpanel(ng-controller='sys2Ctrl')
             div(class='headerbar')
                 a(class="menutoggle")
                     i(class="fa fa-bars")
@@ -46,8 +46,6 @@ block content
                                     div(class='numberCircle')#three 3
                                     div(class='numberCircleContainerText') View Report
                     h4#directionText Choose how you will add test data.
-                    div(ng-controller='sys2Ctrl')
-                        div(ng-show='showChoice')
                             div(class="row no-gutter")
                                 div(class='col-sm-6 col-md-4')
                                     div#choiceOne
@@ -124,17 +122,18 @@ block content
                                                         print-xy-chart(grade='{{grade}}')
                                                         <!-- ADD_PAGE -->
                                                         print-line-chart(grade='{{grade}}')
-                                                button.btn.btn-primary.btn.lg(ng-click='saveGradeToPdf(grade)') Save Grade {{grade}} to PDF
+                                                button.btn.btn-primary.btn.lg(ng-click='saveGradeToPdf(grade)') Download {{grade}} Assessment PDF
 
                                     div.col-md-4.col-xs-12.col-sm-4
                                         div(class="responsive-container")
-                                            div#chartdiv
+                                            div(id='chart{{grade}}')
                                                 xy-chart(grade='{{grade}}')
-                                                button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='showLargeChart("xyChart",grade)' ) View Larger Chart
+                                               // button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='showLargeChart("xyChart",grade)' ) View Larger Chart
                                     div.col-md-4.col-xs-12.col-sm-4
                                         div(class="responsive-container")
-                                            div#chartdiv
-                                                line-chart(grade='{{grade}}')
-                                                button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='showLargeChart("lineChart",grade)' ) View Larger Chart
+                                            div(id='chart{{grade}}')
+                                                line-chart(grade='{{grade}}')#'{{grade}}'
+                                               // button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='showLargeChart("lineChart",grade)' ) View Larger Chart
+
 
 

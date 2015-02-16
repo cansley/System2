@@ -849,18 +849,29 @@
                 var targetDiv = $('#linechart' + grade)[0];
                 targetDiv.setAttribute("style", "width: 800px; height: 600px; overflow: hidden; text-align: left;");
                 $scope.lineChartStyles[grade] = $scope.largeChart;
+
+                putChartInModal(grade, chartType);
+
             }
 
             if(chartType === "xyChart"){
                 var targetDiv = $('#xychart' + grade)[0];
                 targetDiv.setAttribute("style", "width: 800px; height: 600px; overflow: hidden; text-align: left;");
                 $scope.xyChartStyles[grade] = $scope.largeChart; // for continuity and to trigger the chart redraw.
+
+                putChartInModal(grade, chartType);
+
+
+
             }
 
         };
 
 
         $scope.showSmallChart = function(chartType, grade){
+
+            alert('chartType:'+chartType);
+
             $scope.bulletSize = 1;
             if(chartType === "lineChart"){
                 var targetDiv = $('#linechart' + grade)[0];
@@ -868,7 +879,9 @@
                 $scope.lineChartStyles[grade] = $scope.smallChart;
             }
 
-            if(chartType === "xyChart"){
+            if(chartType === "#xychart"){
+
+
                 var targetDiv = $('#xychart' + grade)[0];
                 targetDiv.setAttribute("style", "width: 360px; height: 280px; overflow: hidden; text-align: left;");
                 $scope.xyChartStyles[grade] = $scope.smallChart;
@@ -886,3 +899,100 @@
         }
     });
 })();
+
+
+function putChartInModal(num, type){
+
+   // alert("num: "+num);
+   // alert("type: "+type);
+
+    if(type === "lineChart"){
+
+        //wrap chart svg in to modal body //$('#linechart' + grade)[0]
+
+        $('#linechart' + num).wrap( '<div class="modal-body"> </div>' );
+
+
+        //wrap modal body in greater modal
+
+        $('.modal-body').wrap('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
+
+        //add close button and header
+
+        $( '<div class="modal-header"><button onclick="putChartBack('+num+')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>Assessment Chart</h3></div>' ).prependTo( "#chartModal" );
+
+        //place things in the correct location in DOM
+
+        var item = $('#chartModal');  // item to move
+        var want = $('body');  // container to receive it
+        item.remove();
+        want.append(item);
+
+        //show cart
+
+        $('#chartModal').modal('show');
+
+    }
+
+
+
+    if(type === "xyChart"){
+
+        // alert('make xychart bigger ');
+
+        //wrap chart svg in to modal body
+
+        $('#xychart' + num).wrap( '<div class="modal-body"> </div>' );
+
+        //wrap modal body in greater modal
+
+        $('.modal-body').wrap('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
+
+        //add close button and header
+
+        $( '<div class="modal-header"><button onclick="putChartBack('+num+')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>Assessment Chart</h3></div>' ).prependTo( "#chartModal" );
+
+        //place things in the correct location in DOM
+
+        var item = $('#chartModal');  // item to move
+        var want = $('body');  // container to receive it
+        item.remove();
+        want.append(item);
+
+        //show cart
+
+        $('#chartModal').modal('show');
+
+
+    }
+
+
+
+
+
+
+}
+
+function putChartBack(x){
+
+    //closeChart
+
+    var getHTML = $('.modal-body').html()
+
+
+    //remove svg from modal
+
+    $('.modal-body ').remove();
+
+    //add to DOM again!!!!
+
+    $('#chart'+x+'').append(getHTML);
+
+    $('#chart'+x+'').attr('style','');
+
+
+
+}
+
+
+
