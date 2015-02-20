@@ -51,6 +51,7 @@
                     if (chart[chartGrade] === undefined) return;
                     console.log('redrawing ' + chartName + '...');
                     chart[chartGrade].write(chartName);
+                    setTimeout(function(){ chart[chartGrade].validateNow(); }, 10);
                 }, true);
 
                 scope.$watch('xychartData', function(val){
@@ -117,7 +118,7 @@
                     chart[chartGrade].validateData();
 
                     // check me out, too fast for AmCharts!
-                    setTimeout(function(){ chart[chartGrade].validateNow(); }, 1000);
+                    setTimeout(function(){ chart[chartGrade].validateNow(); }, 10);
                 });
             }
         };
@@ -201,7 +202,7 @@
                     chart[chartGrade].validateData();
 
                     // check me out, too fast for AmCharts!
-                    setTimeout(function(){ chart[chartGrade].validateNow(); }, 1000);
+                    setTimeout(function(){ chart[chartGrade].validateNow(); }, 10);
                 });
             }
         };
@@ -226,6 +227,7 @@
                     if(lineChart[chartGrade] === undefined)return;
                     console.log('redrawing ' + chartName + '...');
                     lineChart[chartGrade].write(chartName);
+                    setTimeout(function(){ lineChart[chartGrade].validateNow(); }, 10);
                 }, true);
 
                 scope.$watch('linechartData', function(val){
@@ -304,7 +306,7 @@
                     lineChart[chartGrade].validateData();
                     lineChart[chartGrade].write(chartName);
                     // check me out, too fast for AmCharts!
-                    setTimeout(function(){ lineChart[chartGrade].validateNow(); }, 1000);
+                    setTimeout(function(){ lineChart[chartGrade].validateNow(); }, 10);
                 });
             }
         };
@@ -400,7 +402,7 @@
                     lineChart[chartGrade].validateData();
                     lineChart[chartGrade].write(chartName);
                     // check me out, too fast for AmCharts!
-                    setTimeout(function(){ lineChart[chartGrade].validateNow(); }, 1000);
+                    setTimeout(function(){ lineChart[chartGrade].validateNow(); }, 10);
                 });
             }
         };
@@ -675,7 +677,7 @@
         return m;
     });
 
-    system2.controller("sys2Ctrl", function($scope, $http, Student, StudentData){
+    system2.controller("sys2Ctrl", function($compile, $scope, $http, Student, StudentData){
         var app = this;
         console.log('init controller...');
         $scope.students = [];
@@ -691,7 +693,7 @@
 
         $scope.smallChart = {"width": "360px", "height": "280px"};
         $scope.largeChart = {"width": "800px", "height": "600px"};
-        $scope.printChart = {"width": "1024px", "height": "768px"};
+        $scope.printChart = {"width": "1000px", "height": "600px"};
 
         $scope.GetStudentData = function(){ return StudentData; };
 
@@ -847,31 +849,20 @@
             $scope.bulletSize = 10;
             if(chartType === "lineChart"){
                 var targetDiv = $('#linechart' + grade)[0];
-                targetDiv.setAttribute("style", "width: 800px; height: 600px; overflow: hidden; text-align: left;");
-                $scope.lineChartStyles[grade] = $scope.largeChart;
-
-                putChartInModal(grade, chartType);
-
+                var chartStyles = $scope.lineChartStyles;
             }
 
             if(chartType === "xyChart"){
                 var targetDiv = $('#xychart' + grade)[0];
-                targetDiv.setAttribute("style", "width: 800px; height: 600px; overflow: hidden; text-align: left;");
-                $scope.xyChartStyles[grade] = $scope.largeChart; // for continuity and to trigger the chart redraw.
-
-                putChartInModal(grade, chartType);
-
-
-
+                var chartStyles = $scope.xyChartStyles;
             }
 
+            targetDiv.setAttribute("style", "width: 800px; height: 600px; overflow: hidden; text-align: left;");
+            chartStyles[grade] = $scope.largeChart;
         };
 
 
         $scope.showSmallChart = function(chartType, grade){
-
-            alert('chartType:'+chartType);
-
             $scope.bulletSize = 1;
             if(chartType === "lineChart"){
                 var targetDiv = $('#linechart' + grade)[0];
@@ -879,7 +870,7 @@
                 $scope.lineChartStyles[grade] = $scope.smallChart;
             }
 
-            if(chartType === "#xychart"){
+            if(chartType === "xyChart"){
 
 
                 var targetDiv = $('#xychart' + grade)[0];
@@ -890,109 +881,124 @@
 
         $scope.saveGradeToPdf = function(grade){
             console.log("saving pdf...");
-            var printDivName = "#printDiv" + grade;
-            var pdf = new jsPDF('l', 'pt', 'letter');
-            var source = $(printDivName).first()[0];
-            console.log(source);
-            pdf.fromHTML(source, 0.5, 0.5,{'width': 7.5});
-            pdf.save('Grade ' + grade + ' Analysis.pdf');
+            $('#printChartDiv' + grade)[0].setAttribute('style', '');
+            AmCharts.charts.forEach(function(chart, idx,arr){
+                chart.validateNow();
+            });
+            $('#printChartDiv' + grade)[0].setAttribute('style', 'display:none;');
+            var printDivName = "#printDiv" + grade + ' datasummary';
+            var svgCollSelector = "#printDiv" + grade + " svg";
+            var svgColl = $(svgCollSelector);
+            var chartData = [];
+            var images = [];
+
+            for(var x=0; x<svgColl.length;x++){
+                var svg = svgColl[x];
+                var svgData = new XMLSerializer().serializeToString(svg);
+
+                images[x] = new Image();
+                images[x].width = 1000;
+                images[x].height = 600;
+                images[x].src = "data:image/svg+xml;base64," + btoa(svgData);
+
+                images[x].onload = function(){
+                    var img = this;
+                    $('#holder')[0].appendChild(img);
+                    setTimeout(function(){
+                        var canvas = document.createElement("canvas");
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        //$('#printDiv'+grade)[0].appendChild(canvas);
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img,0,0);
+                        chartData.push(canvas.toDataURL("image/png"));
+
+                        if(chartData.length == 2){
+                            var pdf = new jsPDF('l', 'pt', 'letter');
+                            var source = $(printDivName).first()[0];
+                            pdf.fromHTML(source, 20, 20,{'width': 10});
+                            for(var x=0;x<chartData.length;x++){
+                                pdf.addPage();
+                                pdf.addImage(chartData[x], 'png', 15, 20);
+                            }
+
+                            pdf.save('Grade ' + grade + ' Analysis.pdf');
+                            $('#holder')[0].innerHTML = "";
+                            $('#printChartDiv' + grade)[0].hide();
+                        }
+                    }, 100);
+
+
+
+                };
+            }
+        }
+
+        $scope.putChartInModal = function(num, type){
+
+            var chartSelector;
+            if(type==="lineChart"){
+                chartSelector = '#linechart' + num;
+            }
+
+            if( type === "xyChart"){
+                chartSelector = '#xychart' + num;
+            }
+
+            var targetChart = $(chartSelector);
+            targetChart[0].setAttribute("style", "width: 800px; height: 600px; overflow: hidden; text-align: left;");
+            //wrap chart svg in to modal body //$('#linechart' + grade)[0]
+            targetChart.wrap('<div class="modal-body"> </div>' );
+            //wrap modal body in greater modal
+            $('.modal-body').wrap('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
+            //add close button and header
+            $( '<div class="modal-header"><button ng-click="putChartBack('+num+',\''+ type +'\')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>Assessment Chart</h3></div>' ).prependTo( "#chartModal" );
+
+            //var parentModal = angular.element('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
+            //parentModal.app
+
+            //place things in the correct location in DOM
+            var item = $('#chartModal');  // item to move
+            var want = $('.mainpanel');  // container to receive it
+            item.remove();
+            want.append($compile(item)($scope));
+
+            //show chart
+            $('#chartModal').modal('show');
+
+            setTimeout($scope.showLargeChart(type, num), 500);
+        };
+
+        $scope.putChartBack = function(grade, type){
+
+            //closeChart
+
+            var getHTML = $('.modal-body').html()
+
+
+            //remove svg from modal
+
+            $('.modal-body ').remove();
+
+            //add to DOM again!!!!
+            var chartTypeSelector;
+            var chartSelector;
+            if (type === "xyChart"){
+                chartTypeSelector = 'xy-chart[grade="' + grade + '"]';
+                chartSelector = '#xychart' + grade;
+            }
+            if(type === "lineChart"){
+                chartTypeSelector = 'line-chart[grade="' + grade + '"]';
+                chartSelector = '#linechart' + grade;
+            }
+            var targetDiv = $(chartTypeSelector)[0];
+            targetDiv.innerHTML = getHTML;
+            $('#chartModal').remove();
+            $('.modal-backdrop').remove();
+            $scope.showSmallChart(type, grade);
         }
     });
 })();
-
-
-function putChartInModal(num, type){
-
-   // alert("num: "+num);
-   // alert("type: "+type);
-
-    if(type === "lineChart"){
-
-        //wrap chart svg in to modal body //$('#linechart' + grade)[0]
-
-        $('#linechart' + num).wrap( '<div class="modal-body"> </div>' );
-
-
-        //wrap modal body in greater modal
-
-        $('.modal-body').wrap('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
-
-        //add close button and header
-
-        $( '<div class="modal-header"><button onclick="putChartBack('+num+')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>Assessment Chart</h3></div>' ).prependTo( "#chartModal" );
-
-        //place things in the correct location in DOM
-
-        var item = $('#chartModal');  // item to move
-        var want = $('body');  // container to receive it
-        item.remove();
-        want.append(item);
-
-        //show cart
-
-        $('#chartModal').modal('show');
-
-    }
-
-
-
-    if(type === "xyChart"){
-
-        // alert('make xychart bigger ');
-
-        //wrap chart svg in to modal body
-
-        $('#xychart' + num).wrap( '<div class="modal-body"> </div>' );
-
-        //wrap modal body in greater modal
-
-        $('.modal-body').wrap('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
-
-        //add close button and header
-
-        $( '<div class="modal-header"><button onclick="putChartBack('+num+')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>Assessment Chart</h3></div>' ).prependTo( "#chartModal" );
-
-        //place things in the correct location in DOM
-
-        var item = $('#chartModal');  // item to move
-        var want = $('body');  // container to receive it
-        item.remove();
-        want.append(item);
-
-        //show cart
-
-        $('#chartModal').modal('show');
-
-
-    }
-
-
-
-
-
-
-}
-
-function putChartBack(x){
-
-    //closeChart
-
-    var getHTML = $('.modal-body').html()
-
-
-    //remove svg from modal
-
-    $('.modal-body ').remove();
-
-    //add to DOM again!!!!
-
-    $('#chart'+x+'').append(getHTML);
-
-    $('#chart'+x+'').attr('style','');
-
-
-
-}
 
 
 

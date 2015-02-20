@@ -18,7 +18,7 @@ block head
     script(src='javascripts/custom.js')
 block content
     section()
-        div.mainpanel(ng-controller='sys2Ctrl')
+        div.mainpanel()
             div(class='headerbar')
                 a(class="menutoggle")
                     i(class="fa fa-bars")
@@ -118,7 +118,7 @@ block content
                                                 div(id='printDiv{{grade}}')
                                                     datasummary(grade='{{grade}}')
                                                     <!-- ADD_PAGE -->
-                                                    div(style='display:none;')
+                                                    div(id='printChartDiv{{grade}}', style='display:none;')
                                                         print-xy-chart(grade='{{grade}}')
                                                         <!-- ADD_PAGE -->
                                                         print-line-chart(grade='{{grade}}')
@@ -128,12 +128,12 @@ block content
                                         div(class="responsive-container")
                                             div(id='chart{{grade}}')
                                                 xy-chart(grade='{{grade}}')
-                                               // button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='showLargeChart("xyChart",grade)' ) View Larger Chart
+                                                button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='putChartInModal(grade, "xyChart")' ) View Larger Chart
                                     div.col-md-4.col-xs-12.col-sm-4
                                         div(class="responsive-container")
                                             div(id='chart{{grade}}')
                                                 line-chart(grade='{{grade}}')#'{{grade}}'
-                                               // button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='showLargeChart("lineChart",grade)' ) View Larger Chart
-
+                                                button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='putChartInModal(grade, "lineChart")' ) View Larger Chart
+                                div(id='holder')
 
 
