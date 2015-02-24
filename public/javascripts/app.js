@@ -48,7 +48,7 @@
                 scope.$watch('xyChartStyles', function (val) {
                     console.log("xyChartStyles Changed...");
                     if (scope.xychartData == undefined || scope.xychartData == null) return;
-                    if (chart[chartGrade] === undefined) return;
+                    if (chart[chartGrade] === undefined)  return;
                     console.log('redrawing ' + chartName + '...');
                     chart[chartGrade].write(chartName);
                     setTimeout(function(){ chart[chartGrade].validateNow(); }, 10);
@@ -720,6 +720,7 @@
                     if(arr.length > 1) {
                         var student = new Student(arr.slice(0, -3).join(), Number(arr[arr.length-3]), Number(arr[arr.length-2]), Number(arr[arr.length-1]));
                         StudentData.AddStudent(student);
+
                     }
                 }
 
@@ -750,6 +751,7 @@
         $scope.processStudents = function() {
             $scope.xychartData = [];
             $scope.linechartData = [];
+            console.log("processing students...");
             StudentData.Grades().forEach(function(value, idx, arr){
                 var targetGrade = value;
                 var greenPoints = StudentData.WithinStandardDevPlotpoints(targetGrade);
@@ -998,6 +1000,18 @@
         $('#cancelButton').click(function() {
             location.reload();
         });
+
+
+
+        $(document).on('click', 'a.delete-row', function () { //
+            //alert("aa");
+            $(this).closest('tr').remove();
+            return false;
+        });
+
+
+
+
 
 
         $scope.putChartBack = function(grade, type){
