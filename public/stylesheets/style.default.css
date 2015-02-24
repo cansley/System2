@@ -3923,6 +3923,8 @@ div.error label.error:before {
     position: relative;
     padding-bottom: 20%; /* the higher the bigger the ratio */
 
+
+
 }
 .responsive-container > div {
 
@@ -3965,4 +3967,25 @@ table {
     width:100%;
 
 
+}
+
+.idealChart{
+
+
+    width:100% !important;
+    height: 300px;
+
+
+}
+
+
+
+.hidden {
+    width:0px;
+    height: 0px;
+}
+
+#fixedButton{
+
+    display: none;
 }

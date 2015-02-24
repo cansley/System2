@@ -26,8 +26,8 @@ block content
                     h3(style='font-size:100%;padding-left:10px;') System 2
                 div(class="header-right")
                     div#appbuttons
-                        button.btn.btn-success.btn-primary(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
-                        button.btn Cancel
+                        button(id='fixedButton').btn.btn-success.btn-primary(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
+                        button(id='cancelButton').btn Cancel
             div(class="pageheader")
                 h2 3 Easy Steps
             div(class="contentpanel")
@@ -106,6 +106,8 @@ block content
                                         button.btn.btn-primary.btn-sm(ng-click='addStudent()') Add Row
                                         button.btn.btn-primary.btn-sm(ng-click='processStudents(); showChart=true; showForm=false') Generate Report
                          div(class='row')
+                             a.fullscreen(href='#')
+                             a.fullscreenExit(href='#')
                             div(ng-show='showChart')
                                 //button(ng-click='showLargeChart()') Large
                                 //button(ng-click='showMedChart()') Medium
@@ -126,14 +128,15 @@ block content
 
                                     div.col-md-4.col-xs-12.col-sm-4
                                         div(class="responsive-container")
-                                            div(id='chart{{grade}}')
-                                                xy-chart(grade='{{grade}}')
+                                            div.idealChart(id='chart{{grade}}')
+                                                xy-chart.idealChart(grade='{{grade}}')
                                                 button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='putChartInModal(grade, "xyChart")' ) View Larger Chart
                                     div.col-md-4.col-xs-12.col-sm-4
                                         div(class="responsive-container")
-                                            div(id='chart{{grade}}')
-                                                line-chart(grade='{{grade}}')#'{{grade}}'
+                                            div.idealChart(id='chart{{grade}}')
+                                                line-chart.idealChart(grade='{{grade}}')#'{{grade}}'
                                                 button.btn.btn-primary.btn.lg( style='width:320px;margin-left:15px', ng-click='putChartInModal(grade, "lineChart")' ) View Larger Chart
                                 div(id='holder')
+
 
 

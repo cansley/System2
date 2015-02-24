@@ -731,6 +731,7 @@
                 $('#one').addClass('numberCircleDone');
                 $('#two').addClass('numberCircleSelected');
                 $('#directionText').hide();
+                $('#fixedButton').show();
 
             };
             reader.readAsText(file);
@@ -744,6 +745,7 @@
             $scope.showForm=true;
             $scope.showChoice = false;
             $('#directionText').html('Enter Student Test Data | <a style="font-size: 12px;"  href="javascript:history.go(0)"> Go Back, and upload a CSV File </a>')
+            $('#fixedButton').show();
         };
         $scope.processStudents = function() {
             $scope.xychartData = [];
@@ -825,10 +827,14 @@
             });
 
 
-                $('#one').addClass('numberCircleDone');
+            $('#one').addClass('numberCircleDone');
             $('#two').addClass('numberCircleDone');
             $('#three').addClass('numberCircleSelected');
             $('#directionText').hide();
+            $('#fixedButton').hide();
+
+
+
 
 
         };
@@ -841,7 +847,7 @@
 
         $scope.getLineChartStyle = function(grade){
             var style = $scope.lineChartStyles[grade];
-            if(style === undefined) return $scope.smallChart;
+           if(style === undefined) return $scope.smallChart;
             return style;
         };
 
@@ -866,7 +872,7 @@
             $scope.bulletSize = 1;
             if(chartType === "lineChart"){
                 var targetDiv = $('#linechart' + grade)[0];
-                targetDiv.setAttribute("style", "width: 360px; height: 280px; overflow: hidden; text-align: left;");
+               targetDiv.setAttribute("style", "width: 360px; height: 280px; overflow: hidden; text-align: left;");
                 $scope.lineChartStyles[grade] = $scope.smallChart;
             }
 
@@ -874,8 +880,8 @@
 
 
                 var targetDiv = $('#xychart' + grade)[0];
-                targetDiv.setAttribute("style", "width: 360px; height: 280px; overflow: hidden; text-align: left;");
-                $scope.xyChartStyles[grade] = $scope.smallChart;
+               targetDiv.setAttribute("style", "width: 360px; height: 280px; overflow: hidden; text-align: left;");
+               $scope.xyChartStyles[grade] = $scope.smallChart;
             }
         }
 
@@ -945,29 +951,54 @@
                 chartSelector = '#xychart' + num;
             }
 
+
+
             var targetChart = $(chartSelector);
             targetChart[0].setAttribute("style", "width: 800px; height: 600px; overflow: hidden; text-align: left;");
-            //wrap chart svg in to modal body //$('#linechart' + grade)[0]
-            targetChart.wrap('<div class="modal-body"> </div>' );
-            //wrap modal body in greater modal
-            $('.modal-body').wrap('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
-            //add close button and header
-            $( '<div class="modal-header"><button ng-click="putChartBack('+num+',\''+ type +'\')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>Assessment Chart</h3></div>' ).prependTo( "#chartModal" );
+            $(chartSelector).hide();//hiding stuff...
+            setTimeout(function() {
+                //wait to put it in its happy place...
 
-            //var parentModal = angular.element('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
-            //parentModal.app
+                //wrap chart svg in to modal body //$('#linechart' + grade)[0]
+                targetChart.wrap('<div class="modal-body" > </div>' );
+                //wrap modal body in greater modal
+                $('.modal-body').wrap('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
+                //add close button and header
+                $( '<div class="modal-header"><button ng-click="putChartBack('+num+',\''+ type +'\')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>Assessment Chart</h3></div>' ).prependTo( "#chartModal" );
 
-            //place things in the correct location in DOM
-            var item = $('#chartModal');  // item to move
-            var want = $('.mainpanel');  // container to receive it
-            item.remove();
-            want.append($compile(item)($scope));
+                //var parentModal = angular.element('<div id="chartModal" class="modal  fade" tabindex="-1" data-width="760"> </div>');
+                //parentModal.app
 
-            //show chart
-            $('#chartModal').modal('show');
+
+                //place things in the correct location in DOM
+                var item = $('#chartModal');  // item to move
+                var want = $('.mainpanel');  // container to receive it
+                item.remove();
+                want.append($compile(item)($scope));
+
+                //show chart
+                $(chartSelector).show();
+                $('#chartModal').modal('show');
+
+
+            }, 50);
+
+
+
 
             setTimeout($scope.showLargeChart(type, num), 500);
+
+
+
+
+
         };
+
+
+        $('#cancelButton').click(function() {
+            location.reload();
+        });
+
 
         $scope.putChartBack = function(grade, type){
 
