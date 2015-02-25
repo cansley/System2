@@ -959,6 +959,7 @@
             var targetChart = $(chartSelector);
             targetChart[0].setAttribute("style", "width: 800px; height: 600px; overflow: hidden; text-align: left;");
             $(chartSelector).hide();//hiding stuff...
+
             setTimeout(function() {
                 //wait to put it in its happy place...
 
@@ -980,9 +981,9 @@
                 want.append($compile(item)($scope));
 
                 //show chart
-                $(chartSelector).show();
-                $('#chartModal').modal('show');
 
+                $('#chartModal').modal('show');
+                $(chartSelector).show();
 
             }, 50);
 
