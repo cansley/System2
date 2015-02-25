@@ -421,7 +421,9 @@
                 var stdDev = [];
                 var breakDowns = ['score1', 'score2', 'growth'];
 
-                scope.$watch('students', function(val){
+                scope.$watch('studentsUpdated', function(val){
+                    if(val=== undefined){ return;}
+
                     var StudentData = scope.GetStudentData();
                     avg["score1"] = StudentData.AverageScore1(grade).toFixed(2);
                     avg["score2"] = StudentData.AverageScore2(grade).toFixed(2);
@@ -690,6 +692,7 @@
         $scope.showFile = true;
         $scope.showChoice = true;
         $scope.showSuccess = false;
+        $scope.studentsUpdated;
 
         $scope.smallChart = {"width": "360px", "height": "280px"};
         $scope.largeChart = {"width": "800px", "height": "600px"};
@@ -749,6 +752,7 @@
             $('#fixedButton').show();
         };
         $scope.processStudents = function() {
+            $scope.$broadcast('studentDataUpdated');
             $scope.xychartData = [];
             $scope.linechartData = [];
             console.log("processing students...");
@@ -834,11 +838,8 @@
             $('#three').addClass('numberCircleSelected');
             $('#directionText').hide();
             $('#fixedButton').hide();
-
-
-
-
-
+            console.log('updating students');
+            $scope.studentsUpdated = Date.now();
         };
 
         $scope.getXyChartStyle = function(grade){
