@@ -512,7 +512,6 @@
                 return studentData.Data;
             }
 
-            grade = Number(grade);
             return studentData.Data.filter(function(student){
                 if(student.grade === grade){
                     return true;
@@ -721,7 +720,7 @@
                     var content = contents[i].replace(/'/g, "").replace(/"/g, '');
                     var arr = content.split(',');
                     if(arr.length > 1) {
-                        var student = new Student(arr.slice(0, -3).join(), Number(arr[arr.length-3]), Number(arr[arr.length-2]), Number(arr[arr.length-1]));
+                        var student = new Student(arr.slice(0, -3).join(), arr[arr.length-3], Number(arr[arr.length-2]), Number(arr[arr.length-1]));
                         StudentData.AddStudent(student);
 
                     }
